@@ -29,7 +29,8 @@ function SORTM = irf_detect_esw_edl(varargin)
 % Examples
 % SORTM = irf_detect_esw_edl(Em, tm, 'figpath', './figure/mms1')
 %
-% To Do : chaneg it for structure
+% To Do : (1) change it for structure
+%         (2) Make it faster by replacing loop by matrix opration 
 %
 %
 % Author: Ajay Lotekar
