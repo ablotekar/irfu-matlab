@@ -23,7 +23,7 @@ function h = irf_customize_subplot(varargin)
 % following way axis handle is assign in 2 X 2 subplots arrangement  
 %  (1,1) -> h(1), (2,1) -> h(2), (1,2) -> h(3), (2,2) -> h(4)
 %
-% Author : Ajay Lotekar (ablotekar@gmail.com),  Jun 22, 2021
+% Author : Ajay Lotekar,  Jun 22, 2021
 %%
 args = varargin;
 nargs = nargin;
@@ -35,7 +35,7 @@ if nargs == 0 % show only help
 end
 
 if nargs<2 || ~(mod(nargs,2)==0)
-    error('IRFU_MATLAB:irf_subplot:InvalidNumberOfInputs','Incorrect number of input arguments')
+    error('IRFU_MATLAB:irf_customize_subplot:InvalidNumberOfInputs','Incorrect number of input arguments')
 end
 
 
@@ -54,7 +54,7 @@ xR = 0.04;    % x right side space
 yR = 0.07;      % y top side space
 % -----------------------------------
 
-
+Lth = []; Hgt=[];
 while ~isempty(args)
     x = args{1}; args(1) = [];
     switch lower(x)
@@ -70,14 +70,23 @@ while ~isempty(args)
             xR = args{1}; args(1) = [];
         case {'ytop'}
             yR = args{1}; args(1) = [];
+        case {'lth'}
+            Lth = args{1}; args(1) = [];
+        case {'hgt'}
+            Hgt = args{1}; args(1) = [];
     end
 end
 
 xL = 1-x0 - (max(nC) -1)*xg - xR; % Available leght for plots
 yL = 1-y0 - (max(nR)-1)*yg - yR;   % Available hight for plots
-Hgt = yL/max(nR);  % Hight
-Lth = xL/max(nC);  % Length
+if isempty(Lth)
+    Lth = xL/max(nC);  % Length
+end
+if isempty(Hgt)
+    Hgt = yL/max(nR);  % Hight
+end
 k=1;
+
 
 for ju=1:No_of_column
     for iu=1:No_of_Row
