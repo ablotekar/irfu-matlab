@@ -8,7 +8,7 @@ function h = irf_customize_subplot(varargin)
 %  xgap = gap between columns
 %  ygap = gap between rows
 %  ytop = top margin 
-%  xrigh = right margin 
+%  xright = right margin 
 %
 % Examples 
 % h = irf_customize_subplot0(Row, Column, 'xg',0.07, 'yg', 0.07)
