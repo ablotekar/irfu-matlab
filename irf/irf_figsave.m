@@ -9,6 +9,9 @@ function irf_figsave(varargin) %fname,resol,frm, ext)
 % Example:
 %       irf_figsave('figure01', 'res', 300, 'frem', [12 6], 'ext', '.png')
 %       irf_figsave('figure01')
+%
+%  **** Not ready for use ******
+% Do do (1) fixed frame size input problem
 %%
 args = varargin;
 nargs = nargin;
@@ -19,7 +22,7 @@ if nargs == 0 % show only help
     return
 end
 
-if nargs<2 || ~(mod(nargs,2)==0)
+if nargs<2 || ~(mod(nargs,7)==0)
     error('IRFU_MATLAB:irf_figsave:InvalidNumberOfInputs','Incorrect number of input arguments')
 end
 
@@ -32,10 +35,11 @@ fname = args{1};     % file name
 
 while ~isempty(args)
     x = args{1}; args(1) = [];
+    disp(x)
     switch lower(x)
         case {'res'}
             resol = args{1}; args(1) = [];
-        case {'frem'} && length(args{1})==2
+        case {'frem'} 
             frm = args{1}; args(1) = [];
         case {'ext'}
             ext= args{1}; args(1) = [];
