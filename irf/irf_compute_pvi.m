@@ -16,23 +16,28 @@ function  PVI = irf_compute_pvi(B, avhr, Ntau, dint)
 %         PVI.indexPVI = PVI index
 %
 % Author : Ajay Lotekar
+%
+% To Do:
+%       (1) cleaning
+%       (2) Make more genralize
+%       (3) more discrition 
+%   **** Not ready to use yet *******
 %%
 
 
-dt=min(diff(B.epochUnix));   % Minimum time step
+dt=min(diff(B.time.epochUnix));   % Minimum time step
 
 PVIx=B.data((Ntau+1):end, 1)-B.data(1:end-Ntau, 1);     % dBx
-PVIy=B.data((Ntau+1):end, 1)-B.data(1:end-Ntau, 1);     % dBy
-PVIz=B.data((Ntau+1):end, 1)-B.data(1:end-Ntau, 1);     % dBz
+PVIy=B.data((Ntau+1):end, 2)-B.data(1:end-Ntau, 2);     % dBy
+PVIz=B.data((Ntau+1):end, 3)-B.data(1:end-Ntau, 3);     % dBz
 PVI=sqrt(PVIx.^2+PVIy.^2+PVIz.^2);            % Dinominator in above equation
-time_PVI=B.epochUnix(1:end-Ntau);
+time_PVI=B.time(1:end-Ntau).epochUnix;
 
 
-tmin=min(B.epochUnix); tmax=max(B.epochUnix);    % min and max To values
+tmin=min(B.time(1:end-Ntau).epochUnix); tmax=max(B.time(1:end-Ntau).epochUnix);    % min and max To values
 %time step
 Jo={};
-avhr = 2;
-dT=2*60*60; % avarage sampling time min*60
+dT=avhr*60*60; % avarage sampling time min*60
 for i=1:floor(dint/avhr)
     [I,Ja]=find(time_PVI'>=tmin+(i-1)*dT); [I,Jb]=find(time_PVI'<=tmin+i*dT); Jo{i}=intersect(Ja,Jb);
 end
@@ -57,19 +62,10 @@ end
 norm_PVI=sqrt(norm_PVIx.^2+norm_PVIy.^2+norm_PVIz.^2);
 
 PVI = [];
-PVI.epoch = time_PVI;
-PVI.PVI.x=PVIx;
-PVI.PVI.y=PVIy;
-PVI.PVI.z=PVIz;
-
-PVI.sigma.x = sigma_x;
-PVI.sigma.y = sigma_y;
-PVI.sigma.z = sigma_z;
-
-PVI.normPVI.x = norm_PVIx;
-PVI.normPVI.y = norm_PVIy;
-PVI.normPVI.z = norm_PVIz;
-
-PVI.indexPVI = norm_PVI;
+PVI.pvixyz = TSeries(B.time(1:end-Ntau), [PVIx, PVIy, PVIz]);
+% PVI.sigma = [sigma_x, sigma_y, sigma_z];
+% 
+% PVI.normPVI = [norm_PVIx, norm_PVIy, norm_PVIz];
+PVI.pvi = TSeries(B.time(1:end-Ntau), norm_PVI);
 
 end
